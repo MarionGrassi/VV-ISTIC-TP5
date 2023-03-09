@@ -12,3 +12,45 @@ The process is as follows:
 Include the code of the walker and the snapshot in this document.
 
 ## Answer
+
+Nous n'avons pas réussis à lancer un programme java utilisant Selenium donc nous avons fait un programme python à la place.
+
+```python
+import random
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.common.exceptions import ElementNotInteractableException
+import sys
+
+def wikipedia():
+    browser = webdriver.Firefox()
+    browser.get("https://www.wikipedia.org/")
+
+    i = 0
+    while i < 10:
+        # select a random link
+        links = browser.find_elements(By.TAG_NAME, "a")
+        random_link = random.choice(links)
+        
+        try:
+            # navigate to the link
+            random_link.click()
+            i = i + 1
+        except:
+            # some link aren't clickable
+            print(sys.exc_info()[0])
+            
+
+    # take a screenshot and save it
+    filename = f"screenshot.png"
+    browser.save_screenshot(filename)
+
+    browser.quit()
+
+if __name__ == "__main__":
+    wikipedia()
+```
+
+Voici le screenshot obtenu après avoir cliqué sur 10 liens :
+
+![screenshot](screenshot.png)

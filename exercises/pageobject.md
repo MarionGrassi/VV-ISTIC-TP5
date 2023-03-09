@@ -10,45 +10,58 @@ Write in this document the interface of a page object class for this page.
 
 ```java
 public interface PollPage {
-    
-    public String participant();
-    
-    public PollPage typeParticipant(String participant);
-    
-    public String mail();
-    
-    public PollPage typeMail(String mail);
-    
+
+    public String getParticipantName();
+
+    public PollPage typeParticipantName(String participant);
+
+    public String getParticipantMail();
+
+    public PollPage typeParticipantMail(String mail);
+
     public boolean hasAgenda();
-    
+
     public PollPage setHasAgenda(boolean value);
-    
+
+    public String getAgenda();
+
+    public PollPage typeAgenda(String url);
+
     public boolean hasFoodPreferences();
-    
+
     public PollPage setHasFoodPreferences(boolean value);
-    
-    public boolean calendarOrTableView();
-    
-    public PollPage setCalendarOrTableView();
-    
-    public Map<String, List<Pair<Date, Booleab>>> disponibilities();
-    
+
+    public String getFoodPreferences();
+
+    public PollPage typeFoodPreferences(String foodPreferences);
+
+    /**
+     * @return isCalendarView
+     */
+    public boolean isCalendarViewOrTableView();
+
+    public PollPage setCalendarOrTableView(boolean isCalendar);
+
+    public Map<String, Map<Date, Boolean>> getDisponibilities();
+
     public PollPage setDisponibility(Date date, String participant, boolean available);
-    
-    public NextPage submit();
-    
+
+    public PollPage submit();
+
     public PollPage submitExpectingErrors();
-    
-    public String commentAuthor();
-    
+
+    public Map<String, String> getComments();
+
+    public String getCommentAuthor();
+
     public PollPage typeCommentAuthor(String author);
-    
-    public String commentText();
-    
+
+    public String getCommentText();
+
     public PollPage typeCommentText(String text);
-    
-    public CommentPage addComment();
-    
+
+    public PollPage addComment();
+
     public PollPage addCommentExpectingError();
 }
 ```

@@ -13,42 +13,63 @@ Include the code of the walker and the snapshot in this document.
 
 ## Answer
 
-Nous n'avons pas réussis à lancer un programme java utilisant Selenium donc nous avons fait un programme python à la place.
+```java
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
-```python
-import random
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.common.exceptions import ElementNotInteractableException
-import sys
+import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.By;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 
-def wikipedia():
-    browser = webdriver.Firefox()
-    browser.get("https://www.wikipedia.org/")
+public class WikipediaTest {
+public static void main(String[] args) throws IOException {
+// Set up the web driver
+System.setProperty("webdriver.chrome.driver", "/home/marion/Documents/VV/chromedriver_linux64/chromedriver");
 
-    i = 0
-    while i < 10:
-        # select a random link
-        links = browser.find_elements(By.TAG_NAME, "a")
-        random_link = random.choice(links)
-        
-        try:
-            # navigate to the link
-            random_link.click()
-            i = i + 1
-        except:
-            # some link aren't clickable
-            print(sys.exc_info()[0])
-            
+        ChromeOptions ops = new ChromeOptions();
+        ops.addArguments("--remote-allow-origins=*");
 
-    # take a screenshot and save it
-    filename = f"screenshot.png"
-    browser.save_screenshot(filename)
+        WebDriver driver = new ChromeDriver(ops);
+        Random random = new Random();
 
-    browser.quit()
+        // Navigate to the main page
+        driver.get("https://www.wikipedia.org/");
 
-if __name__ == "__main__":
-    wikipedia()
+        // Select a random link and navigate to it
+        for (int i = 0; i < 10; i++) {
+            List<WebElement> links = driver.findElements(By.tagName("a"));
+            boolean found = false;
+            do {
+                int randomIndex = random.nextInt(links.size());
+                try {
+                    WebElement randomLink = links.get(randomIndex);
+                    randomLink.click();
+                    found = true;
+                } catch (Exception e) {
+                    links.remove(randomIndex);
+                }
+            } while (!found);
+            // Wait for the page to load
+            driver.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
+        }
+
+        // Take a screenshot of the current page
+        File screenshot = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+        String filename = "screenshot.png";
+        FileUtils.copyFile(screenshot, new File(filename));
+
+        // Close the driver
+        driver.quit();
+    }
+}
 ```
 
 Voici le screenshot obtenu après avoir cliqué sur 10 liens :

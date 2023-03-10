@@ -194,4 +194,8 @@ public class ParticipationPageImpl implements ParticipationPage {
         driver.findElement(By.xpath("//*[text() = 'Ajouter commentaire']")).click(); // TODO verifier si erreur
         return this;
     }
+
+    public List<WebElement> errors() {
+        return driver.findElements(By.className("error"));
+    }
 }

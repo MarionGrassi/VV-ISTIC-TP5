@@ -1,5 +1,8 @@
 package participation;
 
+import org.openqa.selenium.WebElement;
+
+import java.util.List;
 import java.util.Map;
 
 public interface ParticipationPage {
@@ -56,4 +59,6 @@ public interface ParticipationPage {
     ParticipationPage addComment();
 
     ParticipationPage addCommentExpectingError();
+
+    List<WebElement> errors();
 }

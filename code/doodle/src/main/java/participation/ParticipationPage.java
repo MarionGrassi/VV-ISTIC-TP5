@@ -7,6 +7,8 @@ import java.util.Map;
 
 public interface ParticipationPage {
 
+    boolean waitUntilAvailble();
+    
     String getParticipantName();
 
     ParticipationPage typeParticipantName(String participant);

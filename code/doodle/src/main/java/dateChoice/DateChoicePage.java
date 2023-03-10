@@ -1,12 +1,10 @@
 package dateChoice;
 
 import create.CreatePage;
-import org.openqa.selenium.Point;
 import resume.ResumePage;
 
-import java.time.LocalDateTime;
-
 public interface DateChoicePage {
+    boolean waitUntilAvailble();
     boolean hasAgenda();
     DateChoicePage setHasAgenda(boolean value);
     String getAgenda();

@@ -14,5 +14,6 @@ public interface CreatePage {
     CreatePage setRepas(boolean isRepas);
     HomePage back();
     DateChoicePage next();
+    boolean waitUntilAvailble();
 
 }

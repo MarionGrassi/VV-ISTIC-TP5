@@ -3,7 +3,11 @@ package admin;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
+
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,5 +53,18 @@ public class AdminPageImpl implements AdminPage {
         String jour = driver.findElement(By.xpath("//table/thead/tr[1]/th["+ (2 + creneau) +"]")).getText();
         String heure = driver.findElement(By.xpath("//table/thead/tr[2]/th["+ (2 + creneau) +"]")).getText();
         return jour + " : " + heure;
+    }
+
+    @Override
+    public boolean waitUntilAvailble() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//table/thead/tr[2]/th")));
+        return true;
+    }
+
+    public List<WebElement> errors() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.className("pi-exclamation-triangle")));
+        return driver.findElements(By.className("pi-exclamation-triangle"));
     }
 }

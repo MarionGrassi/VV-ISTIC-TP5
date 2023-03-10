@@ -1,13 +1,13 @@
 package resume;
 
-import admin.AdminPage;
-import admin.AdminPageImpl;
 import dateChoice.DateChoicePage;
 import dateChoice.DateChoicePageImpl;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import participation.ParticipationPage;
-import participation.ParticipationPageImpl;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
 
 public class ResumePageImpl implements ResumePage {
     WebDriver driver;
@@ -17,20 +17,29 @@ public class ResumePageImpl implements ResumePage {
     }
 
     @Override
-    public ParticipationPage toParticipationPage() {
-        driver.findElement(By.xpath("//div/div[1]/a[1]")).click();
-        return new ParticipationPageImpl(driver);
+    public String toParticipationPage() {
+        String href = driver.findElement(By.xpath("//div/div[1]/a[1]")).getAttribute("href");
+        return href;
     }
 
     @Override
-    public AdminPage toAdminPage() {
-        driver.findElement(By.xpath("//div/div[1]/a[2]")).click();
-        return new AdminPageImpl(driver);
+    public String toAdminPage() {
+        String href = driver.findElement(By.xpath("//div/div[1]/a[2]")).getAttribute("href");
+        return href;
     }
 
     @Override
     public DateChoicePage back() {
         driver.findElement(By.xpath("//*[text()='Back']")).click();
-        return new DateChoicePageImpl(driver);
+        DateChoicePageImpl dateChoicePage = new DateChoicePageImpl(driver);
+        dateChoicePage.waitUntilAvailble();
+        return dateChoicePage;
+    }
+
+    @Override
+    public boolean waitUntilAvailble() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div/div[1]/a[1]")));
+        return true;
     }
 }

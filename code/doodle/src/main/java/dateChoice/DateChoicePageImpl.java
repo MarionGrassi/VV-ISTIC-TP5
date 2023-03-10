@@ -3,14 +3,16 @@ package dateChoice;
 import create.CreatePage;
 import create.CreatePageImpl;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import resume.ResumePage;
 import resume.ResumePageImpl;
 
-import java.time.LocalDateTime;
+import java.time.Duration;
+import java.util.List;
 
 public class DateChoicePageImpl implements DateChoicePage{
     WebDriver driver;
@@ -46,7 +48,7 @@ public class DateChoicePageImpl implements DateChoicePage{
     public DateChoicePage addCreneau(String time) {
 
         // Get the row for 11:00:00
-        WebElement time_row = driver.findElement(new By.ByCssSelector("tr[data-time=\"" + time + "\"]"));
+        WebElement time_row = driver.findElement(By.xpath("//table/tbody/tr[7]"));
         Actions action = new Actions(driver);
 
         // Select the day by moving a fraction of the width of the <tr>
@@ -60,12 +62,24 @@ public class DateChoicePageImpl implements DateChoicePage{
     @Override
     public CreatePage back() {
         driver.findElement(By.xpath("//*[text()='Back']")).click();
-        return new CreatePageImpl(driver);
+        CreatePageImpl createPage = new CreatePageImpl(driver);
+        createPage.waitUntilAvailble();
+        return createPage;
     }
 
     @Override
     public ResumePage next() {
-        driver.findElement(By.xpath("//*[text()='Next']")).click();
-        return new ResumePageImpl(driver);
+        List<WebElement> webElementList = driver.findElements(By.xpath("//*[text()='Next']"));
+        webElementList.get(webElementList.size()-1).click();
+        ResumePageImpl resumePage = new ResumePageImpl(driver);
+        resumePage.waitUntilAvailble();
+        return resumePage;
+    }
+
+    @Override
+    public boolean waitUntilAvailble() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//table/tbody")));
+        return true;
     }
 }

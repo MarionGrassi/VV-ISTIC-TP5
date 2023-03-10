@@ -3,7 +3,10 @@ package participation;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -88,9 +91,9 @@ public class ParticipationPageImpl implements ParticipationPage {
     @Override
     public ParticipationPage setCalendarOrTableView(boolean calendarView) {
         if (calendarView) {
-            driver.findElement(By.xpath("//p-selectbutton/div/div[1]/i)")).click();
+            driver.findElement(By.xpath("//p-selectbutton/div/div[1]/i")).click();
         } else {
-            driver.findElement(By.xpath("//p-selectbutton/div/div[2]/i)")).click();
+            driver.findElement(By.xpath("//p-selectbutton/div/div[2]/i")).click();
         }
         return this;
     }
@@ -120,12 +123,14 @@ public class ParticipationPageImpl implements ParticipationPage {
 
     @Override
     public ParticipationPage setDisponibility(int creneau, String participant, boolean available) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//p-checkbox")));
         WebElement corpsTableau = driver.findElement(By.xpath("//table/tbody"));
         List<WebElement> rows = corpsTableau.findElements(By.tagName("tr"));
         for (WebElement row : rows) {
-            String nom = row.getText();
+            String nom = row.findElement(By.xpath("//input")).getAttribute("ng-reflect-model");
             if (participant.equals(nom)) {
-                List<WebElement> checkBox = row.findElements(By.tagName("p-checkbox"));
+                List<WebElement> checkBox = row.findElements(By.xpath("//table/tbody/tr/td/p-checkbox"));
                 WebElement box = checkBox.get(creneau);
                 if(box.getAttribute("ng-reflect-model").equals("true") != available) {
                     box.click();
@@ -197,5 +202,12 @@ public class ParticipationPageImpl implements ParticipationPage {
 
     public List<WebElement> errors() {
         return driver.findElements(By.className("error"));
+    }
+
+    @Override
+    public boolean waitUntilAvailble() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.id("mail")));
+        return true;
     }
 }

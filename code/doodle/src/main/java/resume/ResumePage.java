@@ -1,13 +1,12 @@
 package resume;
 
-import admin.AdminPage;
 import dateChoice.DateChoicePage;
-import participation.ParticipationPage;
 
 public interface ResumePage {
-    ParticipationPage toParticipationPage();
-    AdminPage toAdminPage();
+    String toParticipationPage();
+    String toAdminPage();
     DateChoicePage back();
+    boolean waitUntilAvailble();
 
     // TODO rajouter toEtherpad & toChat
 }

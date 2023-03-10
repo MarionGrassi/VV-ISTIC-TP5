@@ -1,24 +1,26 @@
+import admin.AdminPageImpl;
 import create.CreatePage;
 import dateChoice.DateChoicePage;
 import home.HomePage;
 import home.HomePageImpl;
-import org.junit.Test;
-import org.openqa.selenium.Point;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import participation.ParticipationPage;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import participation.ParticipationPageImpl;
 import resume.ResumePage;
 
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class DoodleTest {
 
     @Test
     public void test() {
+        /*
         // Set up the web driver
         System.setProperty("webdriver.chrome.driver", "/home/marion/Documents/VV/chromedriver_linux64/chromedriver");
 
@@ -26,6 +28,8 @@ public class DoodleTest {
         options.addArguments("--remote-allow-origins=*");
 
         WebDriver driver = new ChromeDriver(options);
+         */
+        WebDriver driver = new FirefoxDriver();
 
         driver.get("http://localhost:4200");
 
@@ -47,13 +51,26 @@ public class DoodleTest {
         ResumePage resumePage = dateChoicePage.next();
 
         // on va sur la page du particpant
-        ParticipationPage participationPage = resumePage.toParticipationPage();
+        String participationPageUrl = resumePage.toParticipationPage();
+        String adminPageUrl = resumePage.toAdminPage();
+
+        driver.get(participationPageUrl);
+        ParticipationPageImpl participationPage = new ParticipationPageImpl(driver);
+        participationPage.waitUntilAvailble();
+
+        participationPage.setCalendarOrTableView(false);
         // on rempli les infos du participant
         participationPage.typeParticipantName("John Doe");
         participationPage.typeParticipantMail("johndoe"); // adresse mail invalide
         participationPage.setDisponibility(0, "John Doe", true);
+        participationPage.submit();
 
-        List<WebElement> errors = participationPage.errors();
+        driver.get(adminPageUrl);
+        AdminPageImpl adminPage = new AdminPageImpl(driver);
+        adminPage.waitUntilAvailble();
+        adminPage.validateCreneau(0);
+
+        List<WebElement> errors = adminPage.errors();
         assertEquals(1, errors.size());
     }
 }

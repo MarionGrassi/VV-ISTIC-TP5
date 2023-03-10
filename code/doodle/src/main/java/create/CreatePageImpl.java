@@ -6,6 +6,10 @@ import home.HomePage;
 import home.HomePageImpl;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
 
 public class CreatePageImpl implements CreatePage{
     WebDriver driver;
@@ -60,12 +64,23 @@ public class CreatePageImpl implements CreatePage{
     @Override
     public HomePage back() {
         driver.findElement(By.xpath("//*[text()='Back']")).click();
-        return new HomePageImpl(driver);
+        HomePageImpl homePage = new HomePageImpl(driver);
+        homePage.waitUntilAvailble();
+        return homePage;
     }
 
     @Override
     public DateChoicePage next() {
         driver.findElement(By.xpath("//*[text()='Next']")).click();
-        return new DateChoicePageImpl(driver);
+        DateChoicePageImpl dateChoicePage = new DateChoicePageImpl(driver);
+        dateChoicePage.waitUntilAvailble();
+        return dateChoicePage;
+    }
+
+    @Override
+    public boolean waitUntilAvailble() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.id("titre")));
+        return true;
     }
 }

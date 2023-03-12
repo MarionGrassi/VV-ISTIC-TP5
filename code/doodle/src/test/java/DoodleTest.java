@@ -71,6 +71,6 @@ public class DoodleTest {
         adminPage.validateCreneau(0);
 
         List<WebElement> errors = adminPage.errors();
-        assertEquals(1, errors.size());
+        assertEquals(0, errors.size());
     }
 }

@@ -12,4 +12,6 @@ Include in this document the code of the test and, if you did it, the link to th
 
 ## Answer
 
+Si on créée un sondage et que un participant s'inscrit avec une adresse mail non valide (qui ne prend pas la forme d'une adresse mail), on ne peut plus valider un créneau en tant qu'administrateur.
 
+Vous pouvez retrouvez le code [ici](../code/doodle).
